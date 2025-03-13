@@ -42,8 +42,6 @@ A simple and intuitive expense tracker built using React and TailwindCSS to help
 - **TailwindCSS** – For styling and responsive design.
 - **Recharts** – For interactive and dynamic charting.
 
-- **React** – For building the user interface.
-- **TailwindCSS** – For styling and responsive design.
 
 ## Contributing
 
