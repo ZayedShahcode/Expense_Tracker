@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ExpenseList } from '../components/ExpenseList';
 import { ExpenseTracker } from '../components/ExpenseTracker';
+import { useEffect } from 'react';
+import { useExpense } from '../context/ExpenseContext';
 
 
 
 
 export const Dashboard = () => {
+  const {fetchExpenses} = useExpense();
+  useEffect(()=>{
+    fetchExpenses()
+},[])
 
   const date = new Date();
   return (

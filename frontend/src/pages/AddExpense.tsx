@@ -15,19 +15,43 @@ export const AddExpense = () => {
   const { setExpenses } = useExpense();
   const navigate = useNavigate();
 
-  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const addExpense = async (updatedExpense: ExpenseType) => {
+    try {
+      const response = await fetch("http://localhost:8080/createExpense", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedExpense)
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add expense");
+      }
+      else{
+        console.log("Successfully added expense");
+
+        setExpenses((prevState) => [...prevState, updatedExpense]);
+
+      setExpense(initialState);
+
+      navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error adding expense:", error);
+    }
+  };
+  const handleOnClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const updatedExpense = {
+    const updatedExpense : ExpenseType = {
       ...expense,
       date: formatDate(expense.date)
     };
 
-    setExpenses((prevState) => [...prevState, updatedExpense]);
+    await addExpense(updatedExpense)
 
-    setExpense(initialState);
-
-    navigate("/dashboard");
+    
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

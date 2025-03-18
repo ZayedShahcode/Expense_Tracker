@@ -11,15 +11,12 @@ const COLORS: Record<string, string> = {
 
 const parseCustomDate = (customDate: string) => {
   try {
-    // Split time and date parts
     const [timePart, datePart] = customDate.split(" , ");
     
-    if (!timePart || !datePart) return null; // Ensure both parts exist
+    if (!timePart || !datePart) return null; 
 
-    // Parse the date correctly (supports single-digit month/day)
     const parsedDate = parse(datePart, "d/M/yyyy", new Date());
 
-    // Validate if it's a correct date
     if (!isValid(parsedDate)) return null;
 
     return parsedDate;
@@ -55,7 +52,7 @@ export const DateExpense = () => {
   const data = Object.values(groupedData);
 
   return (
-    <div className="flex flex-col items-center mt-8">
+    <div className="flex flex-col items-center my-8 pb-4">
       <h2 className="text-2xl font-bold mb-4">Daily Expense Trend (Stacked)</h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }} barSize={30}>
