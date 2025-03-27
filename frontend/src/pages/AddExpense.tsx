@@ -32,7 +32,6 @@ export const AddExpense = () => {
 
   const addExpense = async (updatedExpense: ExpenseType) => {
     try {
-      console.log(updatedExpense);
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
       console.log("Token being sent:", token);
@@ -40,7 +39,7 @@ export const AddExpense = () => {
         setError("No token found. Please login again.");
         return;
       }
-
+      
       const response = await fetch("http://localhost:8080/api/expense/add", {
         method: "POST",
         headers: {
@@ -49,20 +48,22 @@ export const AddExpense = () => {
         },
         body: JSON.stringify({...updatedExpense, amount: parseFloat(updatedExpense.amount)})
       });
-
+  
       if (!response.ok) {
-        setError(`Failed to add expense: ${response.status}`);
-        throw new Error("Failed to add expense");
+        const errorData = await response.text();
+        console.error("Error response:", errorData);
+        setError(`Failed to add expense: ${response.status} - ${errorData}`);
+        throw new Error(`Failed to add expense: ${response.status} - ${errorData}`);
       }
-
-      console.log("Expense added successfully");
-      //
-      // console.log("Successfully added expense");
-      // setExpenses((prevState) => [...prevState, updatedExpense]);
-      // setExpense(initialState);
-      // navigate("/dashboard");
+  
+      const data = await response.json();
+      console.log("Expense added successfully:", data);
+      setExpenses((prevState) => [...prevState, data]);
+      setExpense(initialState);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error adding expense:", error);
+      setError(error.message || "Failed to add expense");
     } finally {
       setIsSubmitting(false);
     }
@@ -74,12 +75,12 @@ export const AddExpense = () => {
       alert("Please fill in all fields");
       return;
     }
-
+  
     const updatedExpense: ExpenseType = {
       ...expense,
-      date: formatDate(expense.date)
+      date: new Date(expense.date).toISOString().slice(0, 16) // Format as "YYYY-MM-DDTHH:mm"
     };
-
+  
     await addExpense(updatedExpense);
   };
 

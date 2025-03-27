@@ -1,11 +1,4 @@
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0"); 
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    return `${hours}:${minutes} , ${day}/${month}/${year}`;
-};
+    return date.toISOString().slice(0, 16); // This will format as "YYYY-MM-DDTHH:mm"
+  };
