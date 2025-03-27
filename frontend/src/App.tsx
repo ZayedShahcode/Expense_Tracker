@@ -1,11 +1,11 @@
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import { Layout } from './pages/Layout';
-import { Home } from './pages/Home';
-import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
-import { ExpenseProvider } from './context/ExpenseContext';
-import { AddExpense } from './pages/AddExpense';
-import { Reports } from './pages/Reports';
+import { Layout } from './pages/Layout.tsx';
+import { Home } from './pages/Home.tsx';
+import { Login } from './pages/Login.tsx';
+import { Dashboard } from './pages/Dashboard.tsx';
+import { ExpenseProvider } from './context/ExpenseContext.tsx';
+import { AddExpense } from './pages/AddExpense.tsx';
+import { Reports } from './pages/Reports.tsx';
 import {AuthProvider} from "./context/AuthContext.tsx";
 import Profile from "./pages/Profile.tsx";
 
