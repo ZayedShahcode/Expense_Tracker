@@ -151,9 +151,6 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
-            © 2024 ExpenseTracker. All rights reserved.
-          </div>
         </div>
       </footer>
     </div>

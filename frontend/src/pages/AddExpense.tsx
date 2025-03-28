@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/helpers";
+// import { formatDate } from "../utils/helpers";
 
 const initialState: ExpenseType = {
   name: "",
@@ -27,29 +27,43 @@ export const AddExpense = () => {
   const [expense, setExpense] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setExpenses } = useExpense();
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const addExpense = async (updatedExpense: ExpenseType) => {
     try {
       setIsSubmitting(true);
-      const response = await fetch("http://localhost:8080/createExpense", {
+      const token = localStorage.getItem("token");
+      console.log("Token being sent:", token);
+      if (!token) {
+        setError("No token found. Please login again.");
+        return;
+      }
+      console.log(expense.date)
+      const response = await fetch("http://localhost:8080/api/expense/add", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(updatedExpense)
+        body: JSON.stringify({...updatedExpense, amount: (updatedExpense.amount)})
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to add expense");
+        const errorData = await response.text();
+        console.error("Error response:", errorData);
+        setError(`Failed to add expense: ${response.status} - ${errorData}`);
+        throw new Error(`Failed to add expense: ${response.status} - ${errorData}`);
       }
-      
-      console.log("Successfully added expense");
-      setExpenses((prevState) => [...prevState, updatedExpense]);
+  
+      const data = await response.json();
+      console.log("Expense added successfully:", data);
+      setExpenses((prevState) => [...prevState, data]);
       setExpense(initialState);
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error : any) {
       console.error("Error adding expense:", error);
+      setError(error.message || "Failed to add expense");
     } finally {
       setIsSubmitting(false);
     }
@@ -61,23 +75,23 @@ export const AddExpense = () => {
       alert("Please fill in all fields");
       return;
     }
-
+  
     const updatedExpense: ExpenseType = {
       ...expense,
-      date: formatDate(expense.date)
+      date: new Date(expense.date).toISOString().slice(0, 16) // Format as "YYYY-MM-DDTHH:mm"
     };
-
+  
     await addExpense(updatedExpense);
   };
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    let { name, value } = e.target;
-
-    setExpense((prevExpense) => ({
-      ...prevExpense,
-      [name]: name === "amount" ? Number(value) : value
-    }));
-  };
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   let { name, value } = e.target;
+  //
+  //   setExpense((prevExpense) => ({
+  //     ...prevExpense,
+  //     [name]: name === "amount" ? Number(value) : value
+  //   }));
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -87,6 +101,11 @@ export const AddExpense = () => {
             <div className="w-2 h-2 rounded-full bg-[#0092FB]"></div>
             <h1 className="text-2xl font-semibold text-gray-900 text-center">Add New Expense</h1>
           </div>
+          {error!=""?
+              <p className="text-red-600">{error}</p>
+              :
+              <></>
+          }
 
           <form className="space-y-6">
             <div>
@@ -100,7 +119,7 @@ export const AddExpense = () => {
                 placeholder="e.g., Groceries, Movie Tickets"
                 value={expense.name}
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
-                onChange={handleOnChange}
+                onChange={(e) => setExpense({...expense, name : e.target.value})}
               />
             </div>
 
@@ -113,7 +132,7 @@ export const AddExpense = () => {
                 name="category"
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
                 value={expense.category}
-                onChange={handleOnChange}
+                onChange={(e) => setExpense({...expense, category : e.target.value})}
               >
                 <option value="">Select a category</option>
                 {categories.map((category) => (
@@ -137,7 +156,7 @@ export const AddExpense = () => {
                   placeholder="0.00"
                   value={expense.amount}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
-                  onChange={handleOnChange}
+                  onChange={(e) => setExpense({...expense, amount : Number(e.target.value)})}
                 />
               </div>
             </div>
@@ -151,8 +170,8 @@ export const AddExpense = () => {
                 type="datetime-local"
                 name="date"
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
-                onChange={handleOnChange}
                 value={expense.date}
+                onChange={(e) => setExpense({...expense, date : e.target.value})}
               />
             </div>
 
@@ -179,3 +198,4 @@ export const AddExpense = () => {
     </div>
   );
 };
+
