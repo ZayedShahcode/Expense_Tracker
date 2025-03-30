@@ -1,6 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useExpense } from "../context/ExpenseContext";
-import { format, isValid, parse } from "date-fns"; // Import parse for custom formats
+import { format, isValid, parse } from "date-fns"; 
 
 const COLORS: Record<string, string> = {
   Food: "#0092FB",
@@ -11,32 +11,20 @@ const COLORS: Record<string, string> = {
   Utilities: "#82ca9d",
 };
 
+// Function to parse custom date format
 const parseCustomDate = (customDate: string) => {
-  try {
-    const [timePart, datePart] = customDate.split(" , ");
-    
-    if (!timePart || !datePart) return null; 
+  const parsedDate = new Date(customDate); // Directly parse ISO string
 
-    const parsedDate = parse(datePart, "d/M/yyyy", new Date());
-
-    if (!isValid(parsedDate)) return null;
-
-    return parsedDate;
-  } catch (error) {
-    console.error("Error parsing date:", customDate, error);
-    return null;
-  }
+  return isValid(parsedDate) ? parsedDate : null;
 };
 
 export const DateExpense = () => {
   const { expenses } = useExpense();
 
-  // Group expenses by date and category
-  const groupedData: Record<string, Record<string, number>> = {};
+  const groupedData: Record<string, { date: string } & Record<string, number>> = {};
 
   expenses.forEach(({ date, amount, category }) => {
     const parsedDate = parseCustomDate(date);
-
     if (!parsedDate) {
       console.warn("Skipping invalid date:", date);
       return;
@@ -47,14 +35,15 @@ export const DateExpense = () => {
     if (!groupedData[formattedDate]) {
       groupedData[formattedDate] = { date: formattedDate };
     }
-    groupedData[formattedDate][category] = (groupedData[formattedDate][category] || 0) + amount;
+
+    groupedData[formattedDate][category] = 
+      (groupedData[formattedDate][category] || 0) + Number(amount);
   });
 
-  // Convert to Recharts data format and sort by date
+  // Convert object to array & sort by date
   const data = Object.values(groupedData).sort((a, b) => {
-    const dateA = parse(a.date, "dd/MM/yyyy", new Date());
-    const dateB = parse(b.date, "dd/MM/yyyy", new Date());
-    return dateA.getTime() - dateB.getTime();
+    return parse(a.date, "dd/MM/yyyy", new Date()).getTime() - 
+           parse(b.date, "dd/MM/yyyy", new Date()).getTime();
   });
 
   return (

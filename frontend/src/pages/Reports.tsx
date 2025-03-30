@@ -2,6 +2,9 @@ import { DateExpense } from "../components/DateExpense"
 import { ExpenseChart } from "../components/ExpenseChart"
 import { useExpense } from "../context/ExpenseContext"
 import { Link } from "react-router-dom"
+import { ExpenseSummary } from "../components/ExpenseSummary"
+import { TopCategories } from "../components/TopCategories"
+import { MonthlyTrend } from "../components/MonthlyTrend"
 
 export const Reports = () => {
   const {expenses} = useExpense();
@@ -38,13 +41,22 @@ export const Reports = () => {
           <p className="text-gray-600 mt-2">Visualize and analyze your spending patterns</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="mb-8">
+          <ExpenseSummary />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <ExpenseChart />
           </div>
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <DateExpense />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <MonthlyTrend />
+          <TopCategories />
         </div>
       </div>
     </div>

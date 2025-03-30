@@ -34,7 +34,7 @@ export const AddExpense = () => {
     try {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
-      console.log("Token being sent:", token);
+      // console.log("Token being sent:", token);
       if (!token) {
         setError("No token found. Please login again.");
         return;

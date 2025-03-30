@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useExpense } from "../context/ExpenseContext";
 
 const COLORS = ["#0092FB", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];

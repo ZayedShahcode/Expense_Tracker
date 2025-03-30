@@ -35,12 +35,21 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
   const { expenses, setExpenses } = useExpense();
 
   const deleteExpense = async(id: number | undefined)=>{
-    const response = await fetch(`http://localhost:8080/deleteExpense/${id}`,{
+    console.log(id);
+    const token = localStorage.getItem("token");
+      console.log("Token being sent:", token);
+      if (!token) {
+        console.log("No token found. Please login again.");
+        return;
+      }
+    const response = await fetch(`http://localhost:8080/api/expense/deleteExpense/${id}`,{
       method:"DELETE",
       headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${token}`
       }
     })
+    console.log(response)
     if(response.ok){
       const filteredExpenses = expenses.filter((item) => item.id !== id);
       setExpenses(filteredExpenses);
