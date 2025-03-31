@@ -1,5 +1,5 @@
 import React, { JSX } from "react";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline,MdEdit  } from "react-icons/md";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { 
   FaUtensils, 
@@ -13,6 +13,7 @@ import {
   FaGraduationCap, 
   FaEllipsisH 
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface ExpenseItemProps {
   expense: ExpenseType;
@@ -32,10 +33,11 @@ const categoryIcons: Record<string, { icon: JSX.Element; color: string }> = {
 };
 
 export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
-  const { expenses, setExpenses } = useExpense();
+  const { expenses,selectExpense, setExpenses } = useExpense();
+  const navigate = useNavigate()
+  
 
   const deleteExpense = async(id: number | undefined)=>{
-    console.log(id);
     const token = localStorage.getItem("token");
       console.log("Token being sent:", token);
       if (!token) {
@@ -49,7 +51,6 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         "Authorization": `Bearer ${token}`
       }
     })
-    console.log(response)
     if(response.ok){
       const filteredExpenses = expenses.filter((item) => item.id !== id);
       setExpenses(filteredExpenses);
@@ -74,7 +75,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         <div>
           <h3 className="font-medium text-gray-900">{expense.name}</h3>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">{expense.date}</span>
+            {/* <span className="text-sm text-gray-500">{expense.date.slice(0,10)} {expense.date.slice(11)}</span> */}
             <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
               {expense.category}
             </span>
@@ -84,6 +85,13 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
       
       <div className="flex items-center gap-6">
         <span className="text-lg font-semibold text-red-600">₹{expense.amount}</span>
+        <button 
+          onClick={()=>{selectExpense.current=expense;navigate("../edit")}} 
+          className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+          title="Delete expense"
+        >
+          <MdEdit size={20} />
+        </button>
         <button 
           onClick={handleOnDelete} 
           className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"

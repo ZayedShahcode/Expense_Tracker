@@ -45,7 +45,7 @@ const Profile = () => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
-
+    console.log(user?.createdAt)
     return (
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
             <h1 className="text-2xl font-bold text-gray-800">Profile</h1>

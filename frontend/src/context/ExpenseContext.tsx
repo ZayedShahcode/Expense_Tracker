@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export interface ExpenseType {
     id ?: number;
@@ -11,6 +11,7 @@ export interface ExpenseType {
 interface ExpenseContextType {
     expenses: ExpenseType[];
     setExpenses: React.Dispatch<React.SetStateAction<ExpenseType[]>>;
+    selectExpense: React.RefObject<ExpenseType>;
     totalExpense: number;
     fetchExpenses: () => Promise<void>;
 }
@@ -19,6 +20,12 @@ const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
 export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [expenses, setExpenses] = useState<ExpenseType[]>([]);
+    const selectExpense = useRef<ExpenseType>({
+        name : "",
+        category:"",
+        amount:0 ,
+        date:""
+      })
 
     const fetchExpenses = async () => {
         try {
@@ -36,7 +43,6 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
             const data = await response.json();
             setExpenses(data);
-            console.log(data)
         } catch (error) {
             console.error("Failed to fetch expenses:", error);
         }
@@ -49,7 +55,7 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const totalExpense: number = expenses.reduce((sum, expense) => sum + expense.amount, 0);
 
     return (
-        <ExpenseContext.Provider value={{ expenses, setExpenses, totalExpense, fetchExpenses }}>
+        <ExpenseContext.Provider value={{ expenses, setExpenses, totalExpense,selectExpense, fetchExpenses }}>
             {children}
         </ExpenseContext.Provider>
     );

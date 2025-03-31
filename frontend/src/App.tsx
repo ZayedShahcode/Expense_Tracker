@@ -8,6 +8,7 @@ import { AddExpense } from './pages/AddExpense.tsx';
 import { Reports } from './pages/Reports.tsx';
 import {AuthProvider} from "./context/AuthContext.tsx";
 import Profile from "./pages/Profile.tsx";
+import { EditExpense } from './pages/EditExpense.tsx';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path='add' element={<AddExpense/>}/>
           <Route path='reports' element={<Reports/>}/>
           <Route path={'profile'} element={<Profile />} />
+          <Route path='edit' element={<EditExpense/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
