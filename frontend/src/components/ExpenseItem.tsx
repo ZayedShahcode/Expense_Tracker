@@ -14,7 +14,7 @@ import {
   FaEllipsisH 
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-const API_URL = import.meta.env.BACKEND_URL;
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface ExpenseItemProps {
   expense: ExpenseType;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
-const API_URL = import.meta.env.BACKEND_URL;
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const categories = [
   "Food",

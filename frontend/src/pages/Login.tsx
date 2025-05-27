@@ -2,9 +2,8 @@ import {useState} from "react";
 import {motion} from "framer-motion";
 import {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
-// import API_URL from '../../vite.config.ts'
 
-const API_URL = import.meta.env.BACKEND_URL;
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const Login = () => {
     const [signUp, setSignUp] = useState(true);
@@ -18,7 +17,7 @@ export const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const url = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
-        console.log(url);
+        // console.log(url);
         try {
             const response = await fetch(url, {
                 method: "POST",
