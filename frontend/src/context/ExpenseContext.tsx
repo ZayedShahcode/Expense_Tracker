@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+const API_URL = import.meta.env.BACKEND_URL;
 
 export interface ExpenseType {
     id ?: number;
@@ -31,7 +32,7 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const token = localStorage.getItem("token");
             // console.log(token)
-            const response = await fetch("http://localhost:8080/api/expense/getExpenses", {
+            const response = await fetch(`${API_URL}/api/expense/getExpenses`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

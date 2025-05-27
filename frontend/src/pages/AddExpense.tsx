@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
 // import { formatDate } from "../utils/helpers";
+const API_URL = import.meta.env.BACKEND_URL;
 
 const initialState: ExpenseType = {
   name: "",
@@ -40,7 +41,7 @@ export const AddExpense = () => {
         return;
       }
       console.log(expense.date)
-      const response = await fetch("http://localhost:8080/api/expense/add", {
+      const response = await fetch(`${API_URL}/api/expense/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,6 +74,20 @@ export const AddExpense = () => {
     e.preventDefault();
     if (!expense.name || !expense.category || !expense.amount || !expense.date) {
       alert("Please fill in all fields");
+      return;
+    }
+    const enteredDate = new Date(expense.date);
+    const now = new Date();
+    const twentyYearsAgo = new Date();
+    twentyYearsAgo.setFullYear(now.getFullYear() - 20);
+
+    if (enteredDate < twentyYearsAgo) {
+      alert("Date cannot be older than 20 years.");
+      return;
+    }
+
+    if (enteredDate > now) {
+      alert("Date cannot be in the future.");
       return;
     }
   

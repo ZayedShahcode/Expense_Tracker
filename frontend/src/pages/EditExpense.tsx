@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.BACKEND_URL;
 
 const categories = [
   "Food",
@@ -44,7 +45,7 @@ export const EditExpense = () => {
       setIsSubmitting(true);
       const token = localStorage.getItem("token");
   
-      const response = await fetch(`http://localhost:8080/api/expense/update/${updatedExpense.id}`, {
+      const response = await fetch(`${API_URL}/api/expense/update/${updatedExpense.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

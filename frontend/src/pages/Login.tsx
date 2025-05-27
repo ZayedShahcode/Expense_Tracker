@@ -2,6 +2,9 @@ import {useState} from "react";
 import {motion} from "framer-motion";
 import {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
+// import API_URL from '../../vite.config.ts'
+
+const API_URL = import.meta.env.BACKEND_URL;
 
 export const Login = () => {
     const [signUp, setSignUp] = useState(true);
@@ -14,8 +17,8 @@ export const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const url = signUp ? "http://localhost:8080/signup" : "http://localhost:8080/login";
-
+        const url = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
+        console.log(url);
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -23,6 +26,7 @@ export const Login = () => {
                 body: JSON.stringify({username, email, password}),
             });
             if (!response.ok) {
+                // console.log(await response.text())
                 setError(await response.text());
                 throw new Error(`HTTP error!`);
             }
@@ -100,7 +104,9 @@ export const Login = () => {
                 </form>
                 <div
                     className="text-sm text-gray-600 mt-4 text-center cursor-pointer hover:text-blue-500"
-                    onClick={() => setSignUp(!signUp)}
+                    onClick={() =>
+                        setSignUp(!signUp)
+                    }
                 >
                     {signUp ? "Already have an account? Login" : "New User? Sign Up"}
                 </div>
