@@ -76,7 +76,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         <div>
           <h3 className="font-medium text-gray-900">{expense.name}</h3>
           <div className="flex items-center gap-2">
-            {/* <span className="text-sm text-gray-500">{expense.date.slice(0,10)} {expense.date.slice(11)}</span> */}
+            <span className="text-sm text-gray-500">{expense.date.slice(0,10)} {expense.date.slice(11)}</span>
             <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
               {expense.category}
             </span>
@@ -89,7 +89,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         <button 
           onClick={()=>{selectExpense.current=expense;navigate("../edit")}} 
           className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-          title="Delete expense"
+          title="Edit expense"
         >
           <MdEdit size={20} />
         </button>
@@ -104,3 +104,4 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
     </div>
   );
 };
+// Adding sample comment
