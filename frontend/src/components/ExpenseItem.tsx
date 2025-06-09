@@ -14,6 +14,7 @@ import {
   FaEllipsisH 
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 interface ExpenseItemProps {
   expense: ExpenseType;
@@ -44,7 +45,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         console.log("No token found. Please login again.");
         return;
       }
-    const response = await fetch(`http://localhost:8080/api/expense/deleteExpense/${id}`,{
+    const response = await fetch(`${API_URL}/api/expense/deleteExpense/${id}`,{
       method:"DELETE",
       headers:{
         "Content-Type":"application/json",

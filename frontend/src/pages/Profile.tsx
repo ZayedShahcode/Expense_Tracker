@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import {User} from "../context/AuthContext"
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Profile = () => {
     const { auth } = useAuth(); // Get the token from AuthContext
@@ -18,7 +19,7 @@ const Profile = () => {
                     return;
                 }
 
-                const response = await fetch("http://localhost:8080/profile", {
+                const response = await fetch(`${API_URL}/profile`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`, // Send token in Auth header
