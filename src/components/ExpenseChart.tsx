@@ -35,7 +35,7 @@ export const ExpenseChart = () => {
               label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
             >
               {data.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                <Cell key={index} name={entry.name} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip 
