@@ -1,74 +1,54 @@
-# Expense Tracker
+# React + TypeScript + Vite
 
-A simple and intuitive expense tracker built using React and TailwindCSS to help you manage and track your expenses efficiently.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
+Currently, two official plugins are available:
 
-- Add, edit, and delete expenses
-- Categorize expenses for better organization
-- Responsive and clean UI with TailwindCSS
-- Real-time updates using React state management
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Installation & Setup
+## Expanding the ESLint configuration
 
-This project is built using React with Vite for fast development and optimized builds.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/expense-tracker.git
-   cd expense-tracker
-   ```
-2. Navigate to the frontend directory:
-   ```sh
-   cd front-end
-   ```
-3. Install dependencies:
-   ```sh
-   npm install
-   ```
-4. Start the development server:
-   ```sh
-   npm run dev
-   ```
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-## Usage
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-1. Open the application in your browser (`http://localhost:3000` by default).
-2. Add new expenses with descriptions and categories.
-3. View a list of all your expenses.
-4. Delete or edit expenses as needed.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Technologies Used
-
-- **React (Vite)** – For building the user interface with fast development and optimized performance.
-- **TailwindCSS** – For styling and responsive design.
-- **Recharts** – For interactive and dynamic charting.
-
-- **React (Vite)** – For building the user interface with fast development and optimized performance.
-- **TailwindCSS** – For styling and responsive design.
-
-## Contributing
-
-We welcome contributions! Follow these steps to contribute:
-
-1. **Fork the Repository**: Click on the `Fork` button at the top right of the repository page.
-2. **Clone Your Fork**: Clone your forked repository to your local machine.
-   ```sh
-   git clone https://github.com/yourusername/expense-tracker.git
-   ```
-3. **Create a New Branch**: Work on a separate branch for better organization.
-   ```sh
-   git checkout -b feature-branch-name
-   ```
-4. **Make Your Changes**: Implement your feature or bug fix.
-5. **Commit Your Changes**: Write clear and concise commit messages.
-   ```sh
-   git commit -m "Add feature: description of feature"
-   ```
-6. **Push to Your Fork**:
-   ```sh
-   git push origin feature-branch-name
-   ```
-7. **Submit a Pull Request**: Open a PR to merge your changes into the main repository.
-
-
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
