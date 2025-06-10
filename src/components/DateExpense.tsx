@@ -21,7 +21,12 @@ const parseCustomDate = (customDate: string) => {
 export const DateExpense = () => {
   const { expenses } = useExpense();
 
-  const groupedData: Record<string, { date: string } & Record<string, number>> = {};
+  interface GroupedExpense {
+    date: string;
+    [category: string]: number | string;
+  }
+
+  const groupedData: Record<string, GroupedExpense> = {};
 
   expenses.forEach(({ date, amount, category }) => {
     const parsedDate = parseCustomDate(date);
@@ -37,7 +42,7 @@ export const DateExpense = () => {
     }
 
     groupedData[formattedDate][category] = 
-      (groupedData[formattedDate][category] || 0) + Number(amount);
+      (Number(groupedData[formattedDate][category]) || 0) + Number(amount);
   });
 
   // Convert object to array & sort by date
