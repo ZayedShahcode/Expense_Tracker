@@ -18,10 +18,16 @@ const parseCustomDate = (customDate: string) => {
   return isValid(parsedDate) ? parsedDate : null;
 };
 
+// Define a cleaner interface for grouped data
+interface GroupedExpenseData {
+  date: string;
+  [category: string]: string | number | undefined; // date is string, categories are numbers or undefined
+}
+
 export const DateExpense = () => {
   const { expenses } = useExpense();
 
-  const groupedData: Record<string, { date: string } & Record<string, number>> = {};
+  const groupedData: Record<string, GroupedExpenseData> = {};
 
   expenses.forEach(({ date, amount, category }) => {
     const parsedDate = parseCustomDate(date);

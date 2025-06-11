@@ -1,11 +1,12 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.tsx";
+import { useExpense } from "../context/ExpenseContext.tsx";
 
 export const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { auth } = useAuth(); // Extract auth state
-
+  const {setExpenses} = useExpense();
   const isActive = (path: string) => {
     return location.pathname === path;
   };
@@ -23,6 +24,7 @@ export const Layout = () => {
 
   const handleLogout = () => {
     logout();
+    setExpenses([]); 
     navigate("/login");
   };
 

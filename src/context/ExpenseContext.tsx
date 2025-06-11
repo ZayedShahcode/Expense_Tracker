@@ -32,6 +32,10 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
         try {
             const token = localStorage.getItem("token");
             // console.log(token)
+            if (!token) {
+                console.error("No token found. Please login again.");
+                return;
+            }
             const response = await fetch(`${API_URL}/api/expense/getExpenses`, {
                 method: "GET",
                 headers: {
