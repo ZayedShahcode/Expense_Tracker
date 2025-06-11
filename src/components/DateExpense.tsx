@@ -27,7 +27,7 @@ interface GroupedExpenseData {
 export const DateExpense = () => {
   const { expenses } = useExpense();
 
-  const groupedData: Record<string, GroupedExpenseData> = {};
+
 
   expenses.forEach(({ date, amount, category }) => {
     const parsedDate = parseCustomDate(date);
@@ -43,7 +43,7 @@ export const DateExpense = () => {
     }
 
     groupedData[formattedDate][category] = 
-      (groupedData[formattedDate][category] || 0) + Number(amount);
+      (Number(groupedData[formattedDate][category]) || 0) + Number(amount);
   });
 
   // Convert object to array & sort by date
