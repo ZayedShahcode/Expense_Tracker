@@ -96,7 +96,7 @@ export const Layout = () => {
                   </svg>
                 </button>
                 {auth && (
-                    <button onClick={handleLogout} className="w-full p-2 text-sm bg-red-600 text-black ml-4 hover:underline rounded-md">
+                    <button onClick={handleLogout} className="w-full p-2 text-sm bg-red-800 text-white font-semibold cursor-pointer ml-4 hover:underline rounded-md">
                       Logout
                     </button>
                 )}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
 // import { formatDate } from "../utils/helpers";
+import {ToastContainer, toast} from 'react-toastify';
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const initialState: ExpenseType = {
@@ -27,9 +28,11 @@ const categories = [
 export const AddExpense = () => {
   const [expense, setExpense] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setExpenses } = useExpense();
   const [error, setError] = useState("");
+  
+  const { setExpenses } = useExpense();
   const navigate = useNavigate();
+  
 
   const addExpense = async (updatedExpense: ExpenseType) => {
     try {
@@ -37,10 +40,10 @@ export const AddExpense = () => {
       const token = localStorage.getItem("token");
       // console.log("Token being sent:", token);
       if (!token) {
-        setError("No token found. Please login again.");
+        toast.error("Login to add an expense");
         return;
       }
-      console.log(expense.date)
+      // console.log(expense.date)
       const response = await fetch(`${API_URL}/api/expense/add`, {
         method: "POST",
         headers: {
@@ -52,18 +55,20 @@ export const AddExpense = () => {
   
       if (!response.ok) {
         const errorData = await response.text();
-        console.error("Error response:", errorData);
+        toast.error(errorData);
         setError(`Failed to add expense: ${response.status} - ${errorData}`);
         throw new Error(`Failed to add expense: ${response.status} - ${errorData}`);
       }
   
       const data = await response.json();
-      console.log("Expense added successfully:", data);
+      toast.success("Expense added successfully:" + data.name);
       setExpenses((prevState) => [...prevState, data]);
       setExpense(initialState);
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard");
+      },1000);
     } catch (error : any) {
-      console.error("Error adding expense:", error);
+      toast.error("Error adding expense:", error);
       setError(error.message || "Failed to add expense");
     } finally {
       setIsSubmitting(false);
@@ -110,8 +115,8 @@ export const AddExpense = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-md mx-auto px-4">
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 hover:shadow-lg transition-shadow duration-300">
+      <div className="max-w-md mx-auto px-4 ">
+        <div className="bg-white rounded-2xl shadow-md border border-gray-300 p-8 hover:shadow-lg transition-shadow duration-300">
           <div className="flex items-center gap-2 mb-8 justify-center">
             <div className="w-2 h-2 rounded-full bg-[#0092FB]"></div>
             <h1 className="text-2xl font-semibold text-gray-900 text-center">Add New Expense</h1>
@@ -210,6 +215,7 @@ export const AddExpense = () => {
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnFocusLoss  />
     </div>
   );
 };
