@@ -2,6 +2,8 @@ import {useState} from "react";
 import {motion} from "framer-motion";
 import {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
+  import { ToastContainer, toast } from 'react-toastify';
+
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,14 +13,16 @@ export const Login = () => {
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [error, setError] = useState("");
-    const {login} = useAuth();  // Get login function from AuthContext
+    const {login} = useAuth();  
     const navigate = useNavigate();
+    const [loading,setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const url = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
         // console.log(url);
         try {
+            setLoading(true);
             const response = await fetch(url, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -27,22 +31,36 @@ export const Login = () => {
             if (!response.ok) {
                 // console.log(await response.text())
                 setError(await response.text());
+                toast.error("Authentication failed. Please check your credentials.");
                 throw new Error(`HTTP error!`);
             }
+            setLoading(false);
             const data = await response.json(); // Parse JSON response
             console.log(data)
             if(signUp) {
+                if (data.error) {
+                    setError(data.error);
+                    toast.error("Sign up failed. Please try again.");
+                } else {
+                    toast.success("Sign up successful! You can now log in.");
+                }
                 setSignUp(false)
                 return
             }
             if (data.accessToken) {
                 login(data.accessToken);
-                navigate("/dashboard");
+                toast.success("Login successful!");
+                setTimeout(() => {
+                  
+                    navigate("/dashboard");
+                },1000);
             } else {
-                console.error("Token not received!");
+                // console.error("Token not received!");
+                toast.error("Login failed. Please try again.");
+
             }
         } catch (error) {
-            console.error("Error:", error);
+            toast.error("An error occurred during authentication. Please try again.");
         }
     };
 
@@ -96,9 +114,10 @@ export const Login = () => {
                     />
                     <button
                         type="submit"
-                        className="w-full p-2 mt-4 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition"
+                        className="cursor-pointer w-full p-2 mt-4 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition"
+                        disabled={loading}
                     >
-                        {signUp ? "Sign Up" : "Login"}
+                        { loading? (signUp ? "Signing up..." : "Logging in...") :  (  signUp ? "Sign Up" : "Login")}
                     </button>
                 </form>
                 <div
@@ -110,6 +129,15 @@ export const Login = () => {
                     {signUp ? "Already have an account? Login" : "New User? Sign Up"}
                 </div>
             </motion.div>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+            />
         </div>
     );
 };

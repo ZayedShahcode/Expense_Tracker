@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ExpenseType, useExpense } from "../context/ExpenseContext";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const categories = [
@@ -52,13 +54,12 @@ export const EditExpense = () => {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(updatedExpense)
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to update expense");
+      });      if (!response.ok) {
+        const errorData = await response.text();
+        toast.error(errorData || "Failed to update expense");
+        throw new Error(errorData || "Failed to update expense");
       }
   
-      
       let data;
       const contentType = response.headers.get("Content-Type");
       if (contentType && contentType.includes("application/json")) {
@@ -67,11 +68,16 @@ export const EditExpense = () => {
         data = await response.text(); 
       }
   
-      console.log("Updated:", data);
-  
+      // Update the expenses state
       setExpenses(expenses.map(exp => (exp.id === updatedExpense.id ? updatedExpense : exp)));
-  
-      navigate("/dashboard");
+      
+      // Show success message
+      toast.success("Expense updated successfully!");
+
+      // Navigate after a short delay to show the toast
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (err) {
       setError("Failed to update expense. Try again.");
     } finally {
@@ -175,9 +181,9 @@ export const EditExpense = () => {
                 {isSubmitting ? "Editing..." : "Edit Expense"}
               </button>
             </div>
-          </form>
-        </div>
+          </form>        </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnFocusLoss />
     </div>
   );
 };
