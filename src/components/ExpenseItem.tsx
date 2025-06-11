@@ -89,7 +89,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
         <button 
           onClick={()=>{selectExpense.current=expense;navigate("../edit")}} 
           className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-          title="Delete expense"
+          title="Edit expense"
         >
           <MdEdit size={20} />
         </button>

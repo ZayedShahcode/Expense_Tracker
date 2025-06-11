@@ -4,14 +4,45 @@ import { ExpenseTracker } from '../components/ExpenseTracker';
 import { useEffect } from 'react';
 import { useExpense } from '../context/ExpenseContext';
 
+
 export const Dashboard = () => {
   const { fetchExpenses } = useExpense();
-  
+  const token = localStorage.getItem("token");
   useEffect(() => {
     fetchExpenses();
   }, []);
 
   const date = new Date();
+  if(!token){
+    return(
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center border border-gray-300">
+          <svg
+            className="w-24 h-24 mx-auto mb-6 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">Oh looks like you haven't logged in</h2>
+          <p className="text-gray-600 mb-6">Login to access dashboard</p>
+          <Link to="/login">
+            <button className="px-6 py-3 bg-[#0092FB] text-white rounded-xl cursor-pointer font-semibold hover:bg-blue-600 transition-colors w-full">
+              Login Now
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}

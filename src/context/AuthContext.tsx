@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
+
 export interface User{
     username: string;
     email: string;
@@ -16,7 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [auth, setAuth] = useState<string | null>(localStorage.getItem("token"));
-
+   
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
