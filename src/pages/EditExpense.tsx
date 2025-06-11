@@ -70,7 +70,7 @@ export const EditExpense = () => {
   
       // Update the expenses state
       setExpenses(expenses.map(exp => (exp.id === updatedExpense.id ? updatedExpense : exp)));
-      
+      console.log(data);
       // Show success message
       toast.success("Expense updated successfully!");
 
