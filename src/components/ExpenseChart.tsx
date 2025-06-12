@@ -1,7 +1,18 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useExpense } from "../context/ExpenseContext";
 
-const COLORS = ["#0092FB", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
+const COLORS: Record<string, string> = {
+  Food: "#0092FB",
+  Rent: "#00C49F",
+  Clothes: "#FFBB28",
+  Recreation: "#FF8042",
+  Transport: "#8884d8",
+  Utilities: "#82ca9d",
+  Entertainment: "#FF1493",
+  Healthcare: "#9370DB",
+  Education: "#20B2AA",
+  Other: "#808080"
+};
 
 export const ExpenseChart = () => {
   const { expenses } = useExpense();
@@ -34,8 +45,8 @@ export const ExpenseChart = () => {
               outerRadius={150} 
               label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
             >
-              {data.map((entry, index) => (
-                <Cell key={index} name={entry.name} fill={COLORS[index % COLORS.length]} />
+              {data.map((entry) => (
+                <Cell key={entry.name} name={entry.name} fill={COLORS[entry.name] || COLORS.Other} />
               ))}
             </Pie>
             <Tooltip 
