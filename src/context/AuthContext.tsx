@@ -23,15 +23,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (storedToken) {
             setAuth(storedToken);
         }
+        const expiry = localStorage.getItem("expiry");
+        if (expiry && new Date(expiry) < new Date()) {
+            logout();
+        }
     }, []);
 
     const login = (token: string) => {
         localStorage.setItem("token", token);
+        localStorage.setItem("expiry",new Date(Date.now() + 10*60*1000).toISOString()); // Set expiry to 1 hour later
         setAuth(token);
     };
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("expiry");
         setAuth(null);
     };
 

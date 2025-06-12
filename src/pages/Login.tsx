@@ -15,12 +15,29 @@ export const Login = () => {
     const [error, setError] = useState("");
     const {login} = useAuth();  
     const navigate = useNavigate();
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(false);    const validatePassword = (password: string): string | null => {
+        if (password.length < 6) {
+            return "Password must be at least 6 characters long";
+        }
+        if (!/[A-Z]/.test(password)) {
+            return "Password must contain at least one capital letter";
+        }
+        return null;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (signUp) {
+            const passwordError = validatePassword(password);
+            if (passwordError) {
+                setError(passwordError);
+                toast.error(passwordError);
+                return;
+            }
+        }
+
         const url = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
-        // console.log(url);
         try {
             setLoading(true);
             const response = await fetch(url, {
@@ -102,16 +119,23 @@ export const Login = () => {
                             setEmail(e.target.value); setError("")
                         }}
                         className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value); setError("")
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    />                    <div>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value); 
+                                setError("");
+                            }}
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        {signUp && (
+                            <p className="text-xs text-gray-500 mt-1">
+                                Password must be at least 6 characters long and contain at least one capital letter
+                            </p>
+                        )}
+                    </div>
                     <button
                         type="submit"
                         className="cursor-pointer w-full p-2 mt-4 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition"

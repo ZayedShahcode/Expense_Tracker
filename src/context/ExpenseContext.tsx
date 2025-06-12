@@ -15,12 +15,14 @@ interface ExpenseContextType {
     selectExpense: React.RefObject<ExpenseType>;
     totalExpense: number;
     fetchExpenses: () => Promise<void>;
+    loading: boolean;
 }
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
 export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [expenses, setExpenses] = useState<ExpenseType[]>([]);
+    const [loading, setLoading] = useState(false);
     const selectExpense = useRef<ExpenseType>({
         name : "",
         category:"",
@@ -30,6 +32,7 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const fetchExpenses = async () => {
         try {
+            setLoading(true);
             const token = localStorage.getItem("token");
             // console.log(token)
             if (!token) {
@@ -51,16 +54,17 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
         } catch (error) {
             console.error("Failed to fetch expenses:", error);
         }
+        finally{
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         fetchExpenses(); // Fetch data when component mounts
     }, []);
 
-    const totalExpense: number = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-
-    return (
-        <ExpenseContext.Provider value={{ expenses, setExpenses, totalExpense,selectExpense, fetchExpenses }}>
+    const totalExpense: number = expenses.reduce((sum, expense) => sum + expense.amount, 0);    return (
+        <ExpenseContext.Provider value={{ expenses, setExpenses, totalExpense, selectExpense, fetchExpenses, loading }}>
             {children}
         </ExpenseContext.Provider>
     );
