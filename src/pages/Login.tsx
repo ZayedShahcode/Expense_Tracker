@@ -79,6 +79,9 @@ export const Login = () => {
         } catch (error) {
             toast.error("An error occurred during authentication. Please try again.");
         }
+        finally{
+            setLoading(false);
+        }
     };
 
 

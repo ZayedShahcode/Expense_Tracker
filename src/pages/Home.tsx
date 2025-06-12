@@ -4,9 +4,10 @@ import landing from "../assets/landing_new.png";
 export const Home = () => {
   return (
     <div className="relative z-12 overflow-hidden h-full">
-      
       <section className="relative min-h-[80vh] flex items-center border-b border-gray-200">
-        <div className="relative z-10 w-full pb-20">          <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">            {/* Left Content */}
+        <div className="relative z-10 w-full pb-20">
+          <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
             <div className="text-center lg:text-left max-w-lg mx-auto lg:mx-0 md:pl-12 md:pt-12">
               <h1 className="text-5xl font-bold text-gray-900 mb-4 leading-tight lg:leading-[1.3] ">
                 Smart Expense Tracking <br />
@@ -22,8 +23,7 @@ export const Home = () => {
                 </button>
               </Link>
             </div>
-            
-            
+
             <div className="hidden lg:flex relative justify-center lg:justify-end pt-12">
               <img
                 src={landing}
@@ -35,7 +35,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
@@ -59,8 +58,8 @@ export const Home = () => {
                 icon: "🔒"
               }
             ].map((feature, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="group flex flex-col items-center text-center p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-100 hover:shadow-md transition-all"
               >
                 <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -78,7 +77,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="py-20 border-t border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
@@ -103,7 +101,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-sm">
@@ -122,7 +119,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-12 border-t border-gray-200 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
