@@ -80,6 +80,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
             <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
               {expense.category}
             </span>
+            <span className="text-xs text-gray-500">{expense.date.slice(0,10)}</span>
           </div>
         </div>
       </div>

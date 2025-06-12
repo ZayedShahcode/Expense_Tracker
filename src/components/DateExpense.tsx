@@ -9,6 +9,10 @@ const COLORS: Record<string, string> = {
   Recreation: "#FF8042",
   Transport: "#8884d8",
   Utilities: "#82ca9d",
+  Entertainment: "#FF1493",
+  Healthcare: "#9370DB",
+  Education: "#20B2AA",
+  Other: "#808080"
 };
 
 // Function to parse custom date format
