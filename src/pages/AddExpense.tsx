@@ -175,6 +175,7 @@ export const AddExpense = () => {
                   name="amount"
                   placeholder="0.00"
                   value={expense.amount}
+                  min={1}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
                   onChange={(e) => setExpense({...expense, amount : Number(e.target.value)})}
                 />

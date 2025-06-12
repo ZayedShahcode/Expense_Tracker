@@ -1,44 +1,40 @@
 import { Link } from "react-router-dom";
-// import landing from "../assets/landing.png";
+import landing from "../assets/landing_new.png";
 
 export const Home = () => {
   return (
-    <div className="relative z-12 border border-black overflow-hidden h-full ">
-      {/* Hero Section with Background Image */}
-
-      {/* Hero Section with Background */}
+    <div className="relative z-12 overflow-hidden h-full">
       <section className="relative min-h-[80vh] flex items-center border-b border-gray-200">
-        {/* <div className="absolute inset-0 w-full h-full">
-          <img
-            src={landing}
-            alt="background"
-            className="w-full h-full object-cover opacity-75"
-          />
-          <div className="absolute inset-0 bg-white/20"></div>
-        </div> */}
-        
-        <div className="relative z-10 w-full pt-32 pb-20">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center">
-              <h1 className="text-5xl font-bold text-gray-900 mb-6">
+        <div className="relative z-10 w-full pb-20">
+          <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left max-w-lg mx-auto lg:mx-0 md:pl-12 md:pt-12">
+              <h1 className="text-5xl font-bold text-gray-900 mb-4 leading-tight lg:leading-[1.3] ">
                 Smart Expense Tracking <br />
-                <span className="text-[#0092FB]">Made Simple</span>
+                <span className="text-[#0092FB] block mt-2">Made Simple</span>
               </h1>
-              <p className="text-xl text-gray-800 max-w-2xl mx-auto mb-10">
+              <p className="text-lg text-gray-800 mb-8 leading-relaxed">
                 Take control of your finances with our intuitive expense tracking solution.
                 Monitor, analyze, and optimize your spending in real-time.
               </p>
               <Link to="/dashboard">
-                <button className="px-8 py-3 bg-[#0092FB] text-white text-lg rounded-lg hover:bg-blue-500 transition-colors cursor-pointer">
+                <button className="px-6 py-2.5 bg-[#0092FB] text-white text-base rounded-lg hover:bg-blue-500 transition-colors cursor-pointer">
                   Start Tracking Free →
                 </button>
               </Link>
+            </div>
+
+            <div className="hidden lg:flex relative justify-center lg:justify-end pt-12">
+              <img
+                src={landing}
+                alt="Expense tracking illustration"
+                className="max-w-[80%] h-auto object-contain"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
@@ -62,8 +58,8 @@ export const Home = () => {
                 icon: "🔒"
               }
             ].map((feature, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="group flex flex-col items-center text-center p-6 bg-white rounded-xl border border-gray-100 hover:border-blue-100 hover:shadow-md transition-all"
               >
                 <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -81,7 +77,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="py-20 border-t border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
@@ -106,7 +101,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-sm">
@@ -125,7 +119,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-12 border-t border-gray-200 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

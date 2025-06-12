@@ -6,7 +6,6 @@ export const ExpenseTracker = () => {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-        {/* Left Section */}
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0092FB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -19,7 +18,6 @@ export const ExpenseTracker = () => {
           </div>
         </div>
 
-        {/* Right Section */}
         <div className="flex items-center gap-8">
           <div className="text-center">
             <p className="text-sm text-gray-600">Transactions</p>
