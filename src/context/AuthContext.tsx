@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         const expiry = localStorage.getItem("expiry");
         if (expiry && new Date(expiry) < new Date()) {
+
             logout();
         }
     }, []);
