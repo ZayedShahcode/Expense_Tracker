@@ -56,7 +56,7 @@ export const ExpenseList = () => {
     .filter(filterByDate);
 
   return (
-    <div>      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+    <div>      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 ">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Recent Expenses</h2>
           <p className="text-sm text-gray-600 mt-1">{filteredExpenses.length} of {expenses.length} transactions</p>

@@ -12,7 +12,7 @@ const initialState: ExpenseType = {
   date: ""
 };
 
-const categories = [
+export const categories = [
   "Food",
   "Rent",
   "Clothes",
@@ -192,6 +192,7 @@ export const AddExpense = () => {
                 name="date"
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0092FB] focus:border-transparent transition-colors"
                 value={expense.date}
+                max={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
                 onChange={(e) => setExpense({...expense, date : e.target.value})}
               />
             </div>
