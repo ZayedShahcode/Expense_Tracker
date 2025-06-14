@@ -5,9 +5,27 @@ import { Link } from "react-router-dom"
 import { ExpenseSummary } from "../components/ExpenseSummary"
 import { TopCategories } from "../components/TopCategories"
 import { MonthlyTrend } from "../components/MonthlyTrend"
+import { useAuth } from "../context/AuthContext"
 
 export const Reports = () => {
   const {expenses} = useExpense();
+  const {auth} = useAuth();
+
+  if(!auth) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-8 bg-white rounded-2xl shadow-sm border border-gray-300 max-w-md">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h2>
+          <p className="text-gray-600 mb-8">Please log in to view your reports.</p>
+          <Link to="/login">
+            <button className="px-6 py-3 bg-[#0092FB] text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors flex items-center m-auto gap-2 shadow-sm cursor-pointer">
+              Log In
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
   
   if(expenses.length === 0) {
     return (

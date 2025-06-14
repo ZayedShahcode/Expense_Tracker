@@ -62,6 +62,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
   }
   
   const handleOnDelete = () => {
+    if (!window.confirm("Are you sure you want to delete this expense?")) return;
     deleteExpense(expense.id);
   };
 
