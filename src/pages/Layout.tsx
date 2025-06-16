@@ -57,6 +57,8 @@ export const Layout = () => {
                 >
                   Home
                 </Link>
+                {auth?
+                <>
                 <Link
                     to="/dashboard"
                     className={`text-sm font-medium transition-colors ${
@@ -86,7 +88,18 @@ export const Layout = () => {
                     }`}
                 >
                   Add Expense
+                </Link>           
+                <Link 
+                    to="/groups"
+                    className={`text-sm font-medium transition-colors ${
+                        isActive("/groups")
+                            ? "text-[#0092FB]"
+                            : "text-gray-300 hover:text-white"
+                    }`}
+                >
+                    Groups
                 </Link>
+                </>:<></>}
               </div>
 
               <div className="flex items-center">
