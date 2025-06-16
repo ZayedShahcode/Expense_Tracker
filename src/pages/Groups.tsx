@@ -270,7 +270,7 @@ export const Groups = () => {
                     <h1 className="text-2xl font-semibold text-gray-900">My Groups</h1>
                     <div className="flex gap-4">
                         <button
-                            onClick={() => navigate("/groups/invite")}
+                            onClick={() => navigate("/groups/invites")}
                             className="cursor-pointer px-4 py-2 border border-[#0092FB] text-[#0092FB] rounded-xl font-semibold hover:bg-blue-50 transition-colors"
                         >
                             View Invitations
