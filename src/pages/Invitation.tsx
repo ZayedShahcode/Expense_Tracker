@@ -21,6 +21,7 @@ export const Invitation = () => {
     const [invitations, setInvitations] = useState<GroupInvitation[]>([]);
 
     useEffect(() => {
+        console.log("HERE");
         const fetchInvitations = async () => {
             const token = auth || localStorage.getItem("token");
             if (!token) {
@@ -28,9 +29,9 @@ export const Invitation = () => {
                 navigate("/login");
                 return;
             }
-
+            
             try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/group/invite/getAll`, {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/group/invite/getall`, {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
@@ -42,6 +43,7 @@ export const Invitation = () => {
                 }
 
                 const data = await response.json();
+                // setInvitations(data.filter((invitation: GroupInvitation) => !invitation.isAccepted));
                 setInvitations(data);
             } catch (error) {
                 toast.error("Error fetching invitations");
@@ -52,38 +54,56 @@ export const Invitation = () => {
         };
 
         fetchInvitations();
-    }, [auth, navigate]);
-
-    const handleInvitation = async (invitationId: number, accept: boolean) => {
+        console.log("ONE")
+    }, []);
+    console.log(invitations);
+    const handleInvitation = async (invitationId: number, accept: boolean,token: string) => {
         try {
-            const token = auth || localStorage.getItem("token");
-            if (!token) {
+            const authToken = auth || localStorage.getItem("token");
+            if (!authToken) {
                 toast.error("Please log in to respond to invitations");
                 return;
             }
-
-            const response = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL}/api/group/invite}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
+            let resp;
+            if(accept){
+                const response = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/group/invite/confirm-invitation?token=${token}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${authToken}`,
+                            "Content-Type": "application/json"
+                        }
                     }
+                );
+                resp = response;
+            }
+            else{
+                const response = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/group/invite/decline/${invitationId}`,{
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${authToken}`,
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    resp = response;
                 }
-            );
-
-            if (!response.ok) {
+                
+                
+            setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
+            if (!resp.ok) {
                 throw new Error(`Failed to ${accept ? 'accept' : 'decline'} invitation`);
             }
 
             toast.success(`Invitation ${accept ? 'accepted' : 'declined'} successfully`);
             if (accept) {
-                // If accepted, get the group ID from response and navigate to it
-                const data = await response.json();
-                navigate(`/groups/${data.groupId}`);
+                
+                
+                const data = await resp.text();
+                toast.success(data);
             } else {
-                // If declined, just remove from list
+                
                 setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
             }
         } catch (error) {
@@ -130,13 +150,13 @@ export const Invitation = () => {
                                     </div>
                                     <div className="flex gap-3">
                                         <button
-                                            onClick={() => handleInvitation(invitation.id, true)}
+                                            onClick={() => handleInvitation(invitation.id, true,invitation.token)}
                                             className="px-4 py-2 bg-[#0092FB] text-white rounded-xl font-medium hover:bg-blue-600 transition-colors"
                                         >
                                             Accept
                                         </button>
                                         <button
-                                            onClick={() => handleInvitation(invitation.id, false)}
+                                            onClick={() => handleInvitation(invitation.id, false,invitation.token)}
                                             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
                                         >
                                             Decline
