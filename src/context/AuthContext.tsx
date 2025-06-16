@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const login = (token: string) => {
         localStorage.setItem("token", token);
-        localStorage.setItem("expiry",new Date(Date.now() + 10*60*1000).toISOString()); // Set expiry to 1 hour later
+        localStorage.setItem("expiry",new Date(Date.now() + 60*24*60*1000).toISOString()); // Set expiry to 1 hour later
         setAuth(token);
     };
 
