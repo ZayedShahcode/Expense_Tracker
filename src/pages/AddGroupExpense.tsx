@@ -62,7 +62,7 @@ export const AddGroupExpense = () => {
                 return;
             }
         }
-        // Prepare request
+      
         const req = {
             groupId: Number(groupId),
             description,
@@ -81,20 +81,27 @@ export const AddGroupExpense = () => {
                 },
                 body: JSON.stringify(req)
             });
-            if (!response.ok) throw new Error("Failed to add group expense");
-            // Fetch updated group
-            const groupRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/groups/${groupId}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
-            if (groupRes.ok) {
-                const updatedGroup = await groupRes.json();
-                setSelectedGroup(updatedGroup);
+
+            if (!response.ok) {
+                throw new Error("Failed to add group expense");
             }
+
+            
+            if (selectedGroup) {
+                const updatedMemberExpenses = selectedGroup.memberExpenses.map(member => ({
+                    ...member,
+                    totalPaid: splitMap[member.memberId] ? member.totalPaid + splitMap[member.memberId] : member.totalPaid
+                }));
+
+                setSelectedGroup({
+                    ...selectedGroup,
+                    memberExpenses: updatedMemberExpenses
+                });
+            }
+
             toast.success("Expense added!");
-            navigate(`/groups/${groupId}`);
+            
+            navigate(`/groups/${groupId}`, { state: { updated: Date.now() } });
         } catch (err) {
             toast.error("Error adding expense");
         }
