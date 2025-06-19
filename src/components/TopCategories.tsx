@@ -1,9 +1,9 @@
 import { useExpense } from "../context/ExpenseContext";
 
 export const TopCategories = () => {
-  const { expenses } = useExpense();
+  const { activeExpenses } = useExpense();
 
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  const categoryTotals = activeExpenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
     return acc;
   }, {} as Record<string, number>);
@@ -45,4 +45,4 @@ export const TopCategories = () => {
       </div>
     </div>
   );
-}; 
+};
