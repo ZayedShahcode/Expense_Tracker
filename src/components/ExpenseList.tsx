@@ -1,6 +1,6 @@
 import { useExpense } from "../context/ExpenseContext";
 import { ExpenseItem } from "./ExpenseItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {ToastContainer,toast} from "react-toastify"
 import { subWeeks, subMonths, subYears, parseISO, isAfter, format } from "date-fns";
 import * as XLSX from 'xlsx';
@@ -31,7 +31,7 @@ const downloadAsExcel = (expenses: any[]) => {
 const timePeriods = ["All Time", "Last Week", "Last Month", "Last Year"];
 
 export const ExpenseList = () => {
-  const { expenses, loading } = useExpense();
+  const { expenses, loading, setActiveExpenses, activeExpenses } = useExpense();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedPeriod, setSelectedPeriod] = useState("All Time");
 
@@ -51,15 +51,21 @@ export const ExpenseList = () => {
     }
   };
 
-  const filteredExpenses = expenses
-    .filter(expense => selectedCategory === "All" ? true : expense.category === selectedCategory)
-    .filter(filterByDate);
+  // Update filtered expenses and context whenever filters change
+  useEffect(() => {
+    const filtered = expenses
+      .filter(expense => selectedCategory === "All" ? true : expense.category === selectedCategory)
+      .filter(filterByDate);
+    
+    setActiveExpenses(filtered);
+  }, [selectedCategory, selectedPeriod, expenses, setActiveExpenses]);
 
   return (
-    <div>      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 ">
+    <div>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6  ">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Recent Expenses</h2>
-          <p className="text-sm text-gray-600 mt-1">{filteredExpenses.length} of {expenses.length} transactions</p>
+          <p className="text-sm text-gray-600 mt-1">{activeExpenses.length} of {expenses.length} transactions</p>
         </div>
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
           <select
@@ -80,7 +86,8 @@ export const ExpenseList = () => {
               <option key={period} value={period}>{period}</option>
             ))}
           </select>
-          <button            onClick={() => downloadAsExcel(filteredExpenses)}
+          <button
+            onClick={() => downloadAsExcel(activeExpenses)}
             className="cursor-pointer w-full md:w-auto px-4 py-2 bg-[#0092FB] text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,42 +98,23 @@ export const ExpenseList = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white text-black">
+      <div className="space-y-4">
         {loading ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center animate-pulse">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Loading expenses...</h3>
-            <p className="text-gray-600">Please wait while we fetch your data</p>
+            <div className="w-16 h-16 mx-auto mb-4 border-4 border-t-[#0092FB] border-r-[#0092FB] border-b-gray-200 border-l-gray-200 rounded-full animate-spin"></div>
+            <p className="text-gray-600">Loading expenses...</p>
           </div>
-        ) : filteredExpenses.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {selectedCategory === "All" ? "No expenses yet" : `No expenses in ${selectedCategory} category`}
-            </h3>
-            <p className="text-gray-600">
-              {selectedCategory === "All" 
-                ? "Add your first expense to get started" 
-                : "Try selecting a different category or add a new expense"}
-            </p>
+        ) : activeExpenses.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl">
+            <p className="text-gray-600">No expenses found for the selected filters</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {filteredExpenses.map((expense) => (
-              <ExpenseItem expense={expense} key={expense.id} />
-            ))}
-          </div>
+          activeExpenses.map((expense) => (
+            <ExpenseItem key={expense.id} expense={expense} />
+          ))
         )}
       </div>
-       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnFocusLoss  />
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

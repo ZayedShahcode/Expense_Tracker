@@ -23,7 +23,7 @@ const parseCustomDate = (customDate: string) => {
 };
 
 export const DateExpense = () => {
-  const { expenses } = useExpense();
+  const { activeExpenses } = useExpense();
 
   interface GroupedExpense {
     date: string;
@@ -32,7 +32,7 @@ export const DateExpense = () => {
 
   const groupedData: Record<string, GroupedExpense> = {};
 
-  expenses.forEach(({ date, amount, category }) => {
+  activeExpenses.forEach(({ date, amount, category }) => {
     const parsedDate = parseCustomDate(date);
     if (!parsedDate) {
       console.warn("Skipping invalid date:", date);

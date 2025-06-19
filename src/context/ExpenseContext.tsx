@@ -12,6 +12,8 @@ export interface ExpenseType {
 interface ExpenseContextType {
     expenses: ExpenseType[];
     setExpenses: React.Dispatch<React.SetStateAction<ExpenseType[]>>;
+    activeExpenses: ExpenseType[];  // This will hold the currently filtered/active expenses
+    setActiveExpenses: React.Dispatch<React.SetStateAction<ExpenseType[]>>;
     selectExpense: React.RefObject<ExpenseType>;
     totalExpense: number;
     fetchExpenses: () => Promise<void>;
@@ -22,6 +24,7 @@ const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
 export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [expenses, setExpenses] = useState<ExpenseType[]>([]);
+    const [activeExpenses, setActiveExpenses] = useState<ExpenseType[]>([]);
     const [loading, setLoading] = useState(false);
     const selectExpense = useRef<ExpenseType>({
         name : "",
@@ -51,6 +54,7 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
             }
             const data = await response.json();
             setExpenses(data);
+            setActiveExpenses(data); // Initially set active expenses to all expenses
         } catch (error) {
             console.error("Failed to fetch expenses:", error);
         }
@@ -63,8 +67,18 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({ child
         fetchExpenses(); // Fetch data when component mounts
     }, []);
 
-    const totalExpense: number = expenses.reduce((sum, expense) => sum + expense.amount, 0);    return (
-        <ExpenseContext.Provider value={{ expenses, setExpenses, totalExpense, selectExpense, fetchExpenses, loading }}>
+    // Calculate total based on active expenses
+    const totalExpense: number = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);    return (
+        <ExpenseContext.Provider value={{ 
+            expenses, 
+            setExpenses,
+            activeExpenses,
+            setActiveExpenses,
+            totalExpense, 
+            selectExpense, 
+            fetchExpenses, 
+            loading 
+        }}>
             {children}
         </ExpenseContext.Provider>
     );

@@ -48,7 +48,7 @@ export const Dashboard = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-8 border border-gray-300">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
               <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
@@ -72,13 +72,11 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Expense Tracker */}
         <div className="mb-8">
           <ExpenseTracker />
         </div>
 
-        {/* Expense List */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
+        <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-300">
           <ExpenseList />
         </div>
       </div>
