@@ -15,9 +15,9 @@ const COLORS: Record<string, string> = {
 };
 
 export const ExpenseChart = () => {
-  const { expenses } = useExpense();
+  const { activeExpenses } = useExpense();
 
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  const categoryTotals = activeExpenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
     return acc;
   }, {} as Record<string, number>);

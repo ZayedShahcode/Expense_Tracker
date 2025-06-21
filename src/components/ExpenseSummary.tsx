@@ -1,12 +1,12 @@
 import { useExpense } from "../context/ExpenseContext";
 
 export const ExpenseSummary = () => {
-  const { expenses } = useExpense();
+  const { activeExpenses } = useExpense();
 
-  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const averageExpense = totalExpenses / expenses.length || 0;
-  const maxExpense = Math.max(...expenses.map(expense => expense.amount));
-  const minExpense = Math.min(...expenses.map(expense => expense.amount));
+  const totalExpenses = activeExpenses.reduce((sum: number, expense) => sum + expense.amount, 0);
+  const averageExpense = activeExpenses.length > 0 ? totalExpenses / activeExpenses.length : 0;
+  const maxExpense = activeExpenses.length > 0 ? Math.max(...activeExpenses.map(expense => expense.amount)) : 0;
+  const minExpense = activeExpenses.length > 0 ? Math.min(...activeExpenses.map(expense => expense.amount)) : 0;
 
   const metrics = [
     {
@@ -64,4 +64,4 @@ export const ExpenseSummary = () => {
       ))}
     </div>
   );
-}; 
+};

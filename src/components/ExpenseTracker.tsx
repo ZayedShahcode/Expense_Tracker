@@ -1,7 +1,9 @@
 import { useExpense } from "../context/ExpenseContext";
 
 export const ExpenseTracker = () => {
-  const { totalExpense, expenses } = useExpense();
+  const { activeExpenses } = useExpense();
+
+  const totalExpense = activeExpenses.reduce((sum: number, expense) => sum + expense.amount, 0);
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-300">
@@ -21,7 +23,7 @@ export const ExpenseTracker = () => {
         <div className="flex items-center gap-8">
           <div className="text-center">
             <p className="text-sm text-gray-600">Transactions</p>
-            <p className="text-2xl font-bold text-gray-900">{expenses.length}</p>
+            <p className="text-2xl font-bold text-gray-900">{activeExpenses.length}</p>
           </div>
           <div className="h-12 w-px bg-gray-200"></div>
           <div className="text-center">

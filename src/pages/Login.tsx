@@ -141,10 +141,24 @@ export const Login = () => {
                     </div>
                     <button
                         type="submit"
-                        className="cursor-pointer w-full p-2 mt-4 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition"
                         disabled={loading}
+                        className={`w-full p-2 mt-4 rounded-lg font-medium transition flex items-center justify-center gap-2 ${
+                            loading
+                                ? "bg-blue-300 text-white cursor-not-allowed"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
                     >
-                        { loading? (signUp ? "Signing up..." : "Logging in...") :  (  signUp ? "Sign Up" : "Login")}
+                        {loading ? (
+                            <>
+                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                </svg>
+                                {signUp ? "Signing up..." : "Logging in..."}
+                            </>
+                        ) : (
+                            signUp ? "Sign Up" : "Login"
+                        )}
                     </button>
                 </form>
                 <div

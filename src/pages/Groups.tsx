@@ -48,6 +48,7 @@ export const Groups = () => {
         createdByUserId: user ? user.id : "",
         memberEmails: []
     });
+    const [creating, setCreating] = useState(false);
 
     useEffect(() => {
         const fetchAllUsers = async () => {
@@ -119,12 +120,15 @@ export const Groups = () => {
     const handleCreateGroup = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        
+        setCreating(true);
+
         try {
             if (!user) {
                 toast.error("User not found. Please log in.");
                 return;
-            }            if (!newGroup.groupName.trim()) {
+            }
+
+            if (!newGroup.groupName.trim()) {
                 setError("Group name is required");
                 return;
             }
@@ -159,6 +163,8 @@ export const Groups = () => {
             const errorMessage = error.message || "Failed to create group";
             setError(errorMessage);
             toast.error(errorMessage);
+        } finally {
+            setCreating(false);
         }
     };
 
@@ -240,6 +246,25 @@ export const Groups = () => {
             fetchAllUsers();
         }
     }, [isModalOpen, auth, user]);
+
+    useEffect(() => {
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setIsModalOpen(false);
+                setError("");
+                setNewGroup({ groupName: "", createdByUserId: "", memberEmails: [] });
+            }
+        };
+
+        if (isModalOpen) {
+            window.addEventListener("keydown", handleEscape);
+        }
+
+        return () => {
+            window.removeEventListener("keydown", handleEscape);
+        };
+    }, [isModalOpen]);
+
     const getFilteredUsers = (): AllUsers[] => {
         if (!searchTerm) return [];
         return allUsers.filter((user: AllUsers) =>
@@ -285,7 +310,7 @@ export const Groups = () => {
                 </div>
 
                 {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-[rgba(0,0,0,0.7)] bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl p-6 w-full max-w-md relative">
                             <button
                                 onClick={() => {
@@ -391,9 +416,24 @@ export const Groups = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-[#0092FB] text-white rounded-xl font-semibold hover:bg-blue-600"
+                                    disabled={creating}
+                                    className={`px-4 py-2 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 ${
+                                        creating
+                                            ? "bg-blue-300 text-white cursor-not-allowed"
+                                            : "bg-[#0092FB] text-white hover:bg-blue-600"
+                                    }`}
                                 >
-                                    Create Group
+                                    {creating ? (
+                                        <>
+                                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                            </svg>
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        "Create Group"
+                                    )}
                                 </button>
                             </div>
                         </form>

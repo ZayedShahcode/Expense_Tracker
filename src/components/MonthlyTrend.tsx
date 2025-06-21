@@ -5,10 +5,10 @@ import { format, parse } from "date-fns";
 
 
 export const MonthlyTrend = () => {
-  const { expenses } = useExpense();
+  const { activeExpenses } = useExpense();
 
 
-  const monthlyData = expenses.reduce((acc, expense) => {
+  const monthlyData = activeExpenses.reduce((acc, expense) => {
     try {
       const date = new Date(expense.date); 
       if (isNaN(date.getTime())) throw new Error("Invalid Date");
@@ -76,4 +76,4 @@ export const MonthlyTrend = () => {
       </div>
     </div>
   );
-}; 
+};
